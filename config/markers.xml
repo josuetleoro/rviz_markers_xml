@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<markers>
+    <frame_id value="map"/>
+
+    <!-- sphere -->
+    <shape type="sphere" ns="spheres" id="0">
+        <pose xyz="-1.0 0.0 0.0" rpy="0 0 0"/>
+        <scale3d xyz="1.0 1.0 1.0"/>
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </shape>
+
+    <!-- <shape type="sphere" ns="spheres" id="1">
+        <pose xyz="1.0 0.0 0.0" rpy="0 0 90"/>
+        <scale3d xyz="1.0 1.0 1.0"/>
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </shape> -->
+
+    <!-- Line -->
+    <shape type="line_strip" ns="lines" id="0">
+        <pose xyz="0.0 1.0 0.0" rpy="0 0 0"/>
+        <scale value="0.1"/>
+        <color rgba="0.0 0.0 1.0 1.0"/>
+        <!-- List of points -->
+        <point xyz="0.0 0.0 0.0"/>
+        <point xyz="1.0 0.0 0.0"/>
+    </shape>
+
+    <!-- Dashed line -->
+    <shape type="dashed_line" ns="dashed_lines" id="0">
+        <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <scale value="0.05"/>
+        <color rgba="1.0 1.0 0.0 1.0"/>
+        <!-- Must have two points -->
+        <dash segments="4" gap_ratio="0.2">
+            <point xyz="0.0 0.0 0.0"/>
+            <point xyz="1.0 0.0 0.0"/>
+        </dash>
+    </shape>
+
+</markers>
