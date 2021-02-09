@@ -93,6 +93,16 @@ namespace RVizVis
                 ROS_INFO("Shape of type dashed_line found with the following parameters:");
                 markers_vector.push_back(parseDashedLine(element));
             }
+            else if (type_str.compare("arrow") == 0)
+            {
+                ROS_INFO("Shape of type arrow found with the following parameters:");
+                markers_vector.push_back(parseArrow(element));
+            }
+            else if (type_str.compare("text") == 0)
+            {
+                ROS_INFO("Shape of type text found with the following parameters:");
+                markers_vector.push_back(parseText(element));
+            }
             else
             {
                 string error_msg = "Shape element has unknown type.";
@@ -177,6 +187,83 @@ namespace RVizVis
                 
         return line_list;
     }
+
+    visualization_msgs::Marker MarkersXMLParser::parseArrow(XMLElement *shape_element)
+    {
+        visualization_msgs::Marker arrow;
+        arrow.type = visualization_msgs::Marker::ARROW;
+        arrow.action = visualization_msgs::Marker::ADD;
+        arrow.header.frame_id = frame_id;
+
+        // Parse ns and id
+        arrow.ns = parseAttributeNs(shape_element);
+        arrow.id = parseAttributeId(shape_element);
+
+        // Parse color
+        arrow.color = parseElementColor(shape_element);
+
+        // Parse scale
+        arrow.scale = parseElementScale3D(shape_element);
+
+        // Check the spec type
+        const char *spec = shape_element->Attribute("spec");
+        if (spec == nullptr)
+        {
+            string error_msg = "Attribute spec missing in shape element of type arrow.";
+            throwErrorWithLine(error_msg, shape_element->GetLineNum());
+        }
+        string spec_str = spec;
+        // Parse the pose or points accordingly
+        if (spec_str.compare("pose") == 0)
+        {
+            // Parse pose
+            arrow.pose = parseElementPose(shape_element);
+        }
+        else if (spec_str.compare("2p") == 0)
+        {
+            // Parse points
+            arrow.points = parseElementPoints(shape_element);
+            if (arrow.points.size() > 2)
+            {
+                string error_msg = "Maximum number of points is two for shape element of type arrow.";
+                throwErrorWithLine(error_msg, shape_element->GetLineNum());
+            }
+        }
+        else
+        {
+            string error_msg = "Invalid spec attribute in shape element of type arrow.";
+            throwErrorWithLine(error_msg, shape_element->GetLineNum());
+        }
+                
+        return arrow;
+    }
+
+    visualization_msgs::Marker MarkersXMLParser::parseText(XMLElement *shape_element)
+    {
+        visualization_msgs::Marker text;
+        text.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+        text.action = visualization_msgs::Marker::ADD;
+        text.header.frame_id = frame_id;
+
+        // Parse ns and id
+        text.ns = parseAttributeNs(shape_element);
+        text.id = parseAttributeId(shape_element);
+
+        // Parse pose
+        text.pose = parseElementPose(shape_element);
+
+        // Parse scale
+        text.scale.z = parseElementScale(shape_element);
+        
+        // Parse color
+        text.color = parseElementColor(shape_element);     
+
+        // Parse text
+        text.text = parseElementText(shape_element);
+                
+        return text;
+    }
+
 
     string MarkersXMLParser::parseAttributeNs(XMLElement *shape_element)
     {
@@ -606,13 +693,12 @@ namespace RVizVis
         dir.normalize();
         // ROS_INFO("Lenght: %.2f", length);
         // ROS_INFO("Dir: %.2f %.2f %.2f", dir.getX(), dir.getY(), dir.getZ());
-
         double seg_plus_gap = length / ((double)segments - gap_ratio);
         double gap_length = seg_plus_gap * gap_ratio;
         double seg_length = seg_plus_gap - gap_length;
-        ROS_INFO("seg_plus_gap: %.2f", seg_plus_gap);
-        ROS_INFO("gap_length: %.2f", gap_length);
-        ROS_INFO("seg_length: %.2f", seg_length);
+        // ROS_INFO("seg_plus_gap: %.2f", seg_plus_gap);
+        // ROS_INFO("gap_length: %.2f", gap_length);
+        // ROS_INFO("seg_length: %.2f", seg_length);
 
         // Calculate the points in the dashed line
         tf_points.resize(segments * 2);
@@ -632,6 +718,26 @@ namespace RVizVis
             points.push_back(temp_point);
         }
         return points;
+    }
+
+    string MarkersXMLParser::parseElementText(XMLElement *shape_element)
+    {
+        XMLElement *scale_element = shape_element->FirstChildElement("text");
+        if (scale_element == nullptr)
+        {
+            string error_msg = "Child element text missing.";
+            throw runtime_error(error_msg);
+        }
+
+        // Extract value attribute
+        const char *value = scale_element->Attribute("value");
+        if (value == nullptr)
+        {
+            string error_msg = "Attribute value missing in text element.";
+            throwErrorWithLine(error_msg, scale_element->GetLineNum());
+        }
+       
+        return string(value);
     }
 
 }; // namespace RvizVis

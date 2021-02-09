@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <markers>
-    <frame_id value="map"/>
+    <frame_id value="base_footprint"/>
 
-    <!-- sphere -->
+    <!-- *Sphere -->
     <shape type="sphere" ns="spheres" id="0">
-        <pose xyz="-1.0 0.0 0.0" rpy="0 0 0"/>
-        <scale3d xyz="1.0 1.0 1.0"/>
-        <color rgba="1.0 1.0 1.0 1.0"/>
+        <pose xyz="1.0 -1.0 0.0" rpy="0 0 0"/>
+        <scale3d xyz="0.1 0.1 0.1"/>
+        <color rgba="0.0 0.0 0.0 1.0"/>
     </shape>
 
-    <!-- <shape type="sphere" ns="spheres" id="1">
-        <pose xyz="1.0 0.0 0.0" rpy="0 0 90"/>
-        <scale3d xyz="1.0 1.0 1.0"/>
-        <color rgba="1.0 1.0 1.0 1.0"/>
-    </shape> -->
+    <shape type="sphere" ns="spheres" id="1">
+        <pose xyz="-2.0 0.0 0.0" rpy="0 0 90"/>
+        <scale3d xyz="0.5 0.5 0.5"/>
+        <color rgba="0.0 0.0 1.0 1.0"/>
+    </shape>
 
-    <!-- Line -->
+    <!-- *Line -->
     <shape type="line_strip" ns="lines" id="0">
         <pose xyz="0.0 1.0 0.0" rpy="0 0 0"/>
         <scale value="0.1"/>
@@ -25,16 +25,40 @@
         <point xyz="1.0 0.0 0.0"/>
     </shape>
 
-    <!-- Dashed line -->
+    <!-- *Dashed line -->
     <shape type="dashed_line" ns="dashed_lines" id="0">
         <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
         <scale value="0.05"/>
-        <color rgba="1.0 1.0 0.0 1.0"/>
+        <color rgba="0.0 0.0 0.0 1.0"/>
         <!-- Must have two points -->
         <dash segments="4" gap_ratio="0.2">
-            <point xyz="0.0 0.0 0.0"/>
-            <point xyz="1.0 0.0 0.0"/>
+            <point xyz="-1.0 -0.5 0.0"/>
+            <point xyz="1.0 -0.5 0.0"/>
         </dash>
+    </shape>
+
+    <!-- *Arrow -->
+    <!-- TODO: Explain how to use this and the other method for the arrow -->
+    <shape type="arrow" ns="arrows" id="0" spec="pose">
+        <scale3d xyz="0.5 0.1 0.1"/>
+        <color rgba="1.0 1.0 0.0 1.0"/>
+        <pose xyz="-1.0 1.0 0.0" rpy="0 0 0"/>
+    </shape>
+
+    <shape type="arrow" ns="arrows" id="1" spec="2p">
+        <scale3d xyz="0.1 0.2 0"/>
+        <color rgba="1.0 0.0 0.0 1.0"/>
+        <!-- Start and end points -->
+        <point xyz="1.0 0.0 0.0"/>
+        <point xyz="1.0 1.0 0.0"/>
+    </shape>
+
+    <!-- *Text -->
+    <shape type="text" ns="text" id="0">
+        <pose xyz="1.0 -1.0 0.25" rpy="0 0 0"/>
+        <scale value="0.1"/>
+        <color rgba="0.0 0.0 0.0 1.0"/>
+        <text value="P1"/>
     </shape>
 
 </markers>
