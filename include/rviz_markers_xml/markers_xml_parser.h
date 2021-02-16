@@ -42,6 +42,7 @@ namespace RVizVis
         visualization_msgs::Marker parseDashedLine(XMLElement *shape_element);
         visualization_msgs::Marker parseArrow(XMLElement *shape_element);
         visualization_msgs::Marker parseText(XMLElement *shape_element);
+        visualization_msgs::Marker parseMesh(XMLElement *shape_element);
 
         string parseAttributeNs(XMLElement *shape_element);
         int parseAttributeId(XMLElement *shape_element);
@@ -53,6 +54,7 @@ namespace RVizVis
         vector<geometry_msgs::Point> parseElementPoints(XMLElement *shape_element);
         vector<geometry_msgs::Point> parseElementDash(XMLElement *shape_element);
         string parseElementText(XMLElement *shape_element);
+        string parseElementUri(XMLElement *shape_element);
         
     public:
         MarkersXMLParser(const string &file_path);

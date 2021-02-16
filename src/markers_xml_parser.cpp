@@ -103,6 +103,11 @@ namespace RVizVis
                 ROS_INFO("Shape of type text found with the following parameters:");
                 markers_vector.push_back(parseText(element));
             }
+            else if (type_str.compare("mesh") == 0)
+            {
+                ROS_INFO("Shape of type mesh found with the following parameters:");
+                markers_vector.push_back(parseMesh(element));
+            }
             else
             {
                 string error_msg = "Shape element has unknown type.";
@@ -260,10 +265,37 @@ namespace RVizVis
 
         // Parse text
         text.text = parseElementText(shape_element);
+        ROS_INFO("Text: %s", text.text.c_str());
                 
         return text;
     }
 
+    visualization_msgs::Marker MarkersXMLParser::parseMesh(XMLElement *shape_element)
+    {
+        visualization_msgs::Marker mesh;
+        mesh.type = visualization_msgs::Marker::MESH_RESOURCE;
+        mesh.action = visualization_msgs::Marker::ADD;
+        mesh.header.frame_id = frame_id;
+
+        // Parse ns and id
+        mesh.ns = parseAttributeNs(shape_element);
+        mesh.id = parseAttributeId(shape_element);
+
+        // Parse pose
+        mesh.pose = parseElementPose(shape_element);
+
+        // Parse scale
+        mesh.scale = parseElementScale3D(shape_element);
+        
+        // Parse color
+        mesh.color = parseElementColor(shape_element);
+
+        // Parse text
+        mesh.mesh_resource = "package://" + parseElementUri(shape_element);
+        ROS_INFO("Uri: %s", mesh.mesh_resource.c_str());
+
+        return mesh;
+    }
 
     string MarkersXMLParser::parseAttributeNs(XMLElement *shape_element)
     {
@@ -722,19 +754,39 @@ namespace RVizVis
 
     string MarkersXMLParser::parseElementText(XMLElement *shape_element)
     {
-        XMLElement *scale_element = shape_element->FirstChildElement("text");
-        if (scale_element == nullptr)
+        XMLElement *text_element = shape_element->FirstChildElement("text");
+        if (text_element == nullptr)
         {
             string error_msg = "Child element text missing.";
             throw runtime_error(error_msg);
         }
 
         // Extract value attribute
-        const char *value = scale_element->Attribute("value");
+        const char *value = text_element->Attribute("value");
         if (value == nullptr)
         {
             string error_msg = "Attribute value missing in text element.";
-            throwErrorWithLine(error_msg, scale_element->GetLineNum());
+            throwErrorWithLine(error_msg, text_element->GetLineNum());
+        }
+       
+        return string(value);
+    }
+
+    string MarkersXMLParser::parseElementUri(XMLElement *shape_element)
+    {
+        XMLElement *uri_element = shape_element->FirstChildElement("uri");
+        if (uri_element == nullptr)
+        {
+            string error_msg = "Child element uri missing.";
+            throw runtime_error(error_msg);
+        }
+
+        // Extract value attribute
+        const char *value = uri_element->Attribute("value");
+        if (value == nullptr)
+        {
+            string error_msg = "Attribute value missing in uri element.";
+            throwErrorWithLine(error_msg, uri_element->GetLineNum());
         }
        
         return string(value);

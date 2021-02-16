@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <markers>
-    <frame_id value="base_footprint"/>
+    <frame_id value="map"/>
 
     <!-- *Sphere -->
     <shape type="sphere" ns="spheres" id="0">
@@ -59,6 +59,14 @@
         <scale value="0.1"/>
         <color rgba="0.0 0.0 0.0 1.0"/>
         <text value="P1"/>
+    </shape>
+
+    <!-- *Mesh -->
+    <shape type="mesh" ns="mesh" id="0">
+        <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <scale3d xyz="1.0 1.0 1.0"/>
+        <color rgba="0.7 0.7 0.7 1.0"/>
+        <uri value="rviz_markers_xml/resources/Table.dae"/>
     </shape>
 
 </markers>
