@@ -48,3 +48,7 @@ add_executable(markers_xml_parser_test src/markers_xml_parser_test.cpp src/marke
 add_dependencies(markers_xml_parser_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(markers_xml_parser_test ${catkin_LIBRARIES})
 
+add_executable(markers_xml_parser_node src/markers_xml_parser_node.cpp src/markers_xml_parser.cpp)
+add_dependencies(markers_xml_parser_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(markers_xml_parser_node ${catkin_LIBRARIES})
+

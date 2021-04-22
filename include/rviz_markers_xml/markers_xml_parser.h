@@ -28,7 +28,6 @@ namespace RVizVis
         int curr_marker_number;
         
         vector<visualization_msgs::Marker> markers_vector;
-        string frame_id;
         string ns;
 
         void throwErrorWithLine(const string &error_str, const int &line_number)
@@ -46,6 +45,7 @@ namespace RVizVis
 
         string parseAttributeNs(XMLElement *shape_element);
         int parseAttributeId(XMLElement *shape_element);
+        string parseAttributeFrameId(XMLElement *shape_element);
 
         geometry_msgs::Pose parseElementPose(XMLElement *shape_element);
         geometry_msgs::Vector3 parseElementScale3D(XMLElement *shape_element);

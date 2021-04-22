@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <markers>
-    <frame_id value="map"/>
 
     <!-- *Sphere -->
-    <shape type="sphere" ns="spheres" id="0">
+    <shape type="sphere" ns="spheres" id="0" frame_id="map">
         <pose xyz="1.0 -1.0 0.0" rpy="0 0 0"/>
         <scale3d xyz="0.1 0.1 0.1"/>
         <color rgba="0.0 0.0 0.0 1.0"/>
     </shape>
 
-    <shape type="sphere" ns="spheres" id="1">
+    <shape type="sphere" ns="spheres" id="1" frame_id="map">
         <pose xyz="-2.0 0.0 0.0" rpy="0 0 90"/>
         <scale3d xyz="0.5 0.5 0.5"/>
         <color rgba="0.0 0.0 1.0 1.0"/>
     </shape>
 
     <!-- *Line -->
-    <shape type="line_strip" ns="lines" id="0">
+    <shape type="line_strip" ns="lines" id="0" frame_id="map">
         <pose xyz="0.0 1.0 0.0" rpy="0 0 0"/>
         <scale value="0.1"/>
         <color rgba="0.0 0.0 1.0 1.0"/>
@@ -26,7 +25,7 @@
     </shape>
 
     <!-- *Dashed line -->
-    <shape type="dashed_line" ns="dashed_lines" id="0">
+    <shape type="dashed_line" ns="dashed_lines" id="0" frame_id="map">
         <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
         <scale value="0.05"/>
         <color rgba="0.0 0.0 0.0 1.0"/>
@@ -38,14 +37,25 @@
     </shape>
 
     <!-- *Arrow -->
-    <!-- TODO: Explain how to use this and the other method for the arrow -->
-    <shape type="arrow" ns="arrows" id="0" spec="pose">
+    <!-- There are two methods to specify an arrow: pose and two points -->
+    
+    <!-- pose: Sets the position of the origin of the arrow. The arrow points -->
+    <!--       in the direction of the x axis of the given pose orientation -->
+    <!-- The scale.x is the arrow length, scale.y is the arrow width and  -->
+    <!-- scale.z is the arrow height -->
+
+    <!-- Two points: The first point defines the start of the arrow and the -->
+    <!--             second point its end -->
+    <!-- The scale.x is the shaft diameter, scale.y is the head diameter and -->
+    <!-- if scale.z is not zero, it specifies the head lenght -->
+    
+    <shape type="arrow" ns="arrows" id="0" frame_id="map" spec="pose">
         <scale3d xyz="0.5 0.1 0.1"/>
         <color rgba="1.0 1.0 0.0 1.0"/>
         <pose xyz="-1.0 1.0 0.0" rpy="0 0 0"/>
     </shape>
 
-    <shape type="arrow" ns="arrows" id="1" spec="2p">
+    <shape type="arrow" ns="arrows" id="1" frame_id="map" spec="2p">
         <scale3d xyz="0.1 0.2 0"/>
         <color rgba="1.0 0.0 0.0 1.0"/>
         <!-- Start and end points -->
@@ -54,7 +64,10 @@
     </shape>
 
     <!-- *Text -->
-    <shape type="text" ns="text" id="0">
+    <!-- The text always appears oriented correctly to the view, the orientation -->
+    <!-- field of the pose is ignored. -->
+    <!-- Scale z specifies the height of uppercase "A" -->
+    <shape type="text" ns="text" id="0" frame_id="map">
         <pose xyz="1.0 -1.0 0.25" rpy="0 0 0"/>
         <scale value="0.1"/>
         <color rgba="0.0 0.0 0.0 1.0"/>
@@ -62,7 +75,7 @@
     </shape>
 
     <!-- *Mesh -->
-    <shape type="mesh" ns="mesh" id="0">
+    <shape type="mesh" ns="mesh" id="0" frame_id="map">
         <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
         <scale3d xyz="1.0 1.0 1.0"/>
         <color rgba="0.7 0.7 0.7 1.0"/>

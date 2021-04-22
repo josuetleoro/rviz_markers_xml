@@ -45,14 +45,6 @@ namespace RVizVis
         ROS_INFO("%d shapes found in markers file", total_markers_number);
         curr_marker_number = 0;
 
-        // Read frame id
-        temp_element = root_node->FirstChildElement("frame_id");
-        if (temp_element == nullptr)
-        {
-            throw runtime_error("No frame_id element found.");
-        }
-        frame_id = temp_element->Attribute("value");
-        ROS_INFO("Frame id: %s", frame_id.c_str());
         markers_vector.clear();
     }
 
@@ -122,14 +114,13 @@ namespace RVizVis
         visualization_msgs::Marker sphere;
         sphere.type = visualization_msgs::Marker::SPHERE;
         sphere.action = visualization_msgs::Marker::ADD;
-        sphere.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         sphere.ns = parseAttributeNs(shape_element);
         sphere.id = parseAttributeId(shape_element);
+        sphere.header.frame_id = parseAttributeFrameId(shape_element);
 
-        // Parse pose
-       
+        // Parse pose       
         sphere.pose = parseElementPose(shape_element);
 
         // Parse scale
@@ -146,11 +137,11 @@ namespace RVizVis
         visualization_msgs::Marker line_strip;
         line_strip.type = visualization_msgs::Marker::LINE_STRIP;
         line_strip.action = visualization_msgs::Marker::ADD;
-        line_strip.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         line_strip.ns = parseAttributeNs(shape_element);
         line_strip.id = parseAttributeId(shape_element);
+        line_strip.header.frame_id = parseAttributeFrameId(shape_element);
 
         // Parse pose       
         line_strip.pose = parseElementPose(shape_element);
@@ -172,11 +163,11 @@ namespace RVizVis
         visualization_msgs::Marker line_list;
         line_list.type = visualization_msgs::Marker::LINE_LIST;
         line_list.action = visualization_msgs::Marker::ADD;
-        line_list.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         line_list.ns = parseAttributeNs(shape_element);
         line_list.id = parseAttributeId(shape_element);
+        line_list.header.frame_id = parseAttributeFrameId(shape_element);
 
         // Parse pose       
         line_list.pose = parseElementPose(shape_element);
@@ -198,11 +189,11 @@ namespace RVizVis
         visualization_msgs::Marker arrow;
         arrow.type = visualization_msgs::Marker::ARROW;
         arrow.action = visualization_msgs::Marker::ADD;
-        arrow.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         arrow.ns = parseAttributeNs(shape_element);
         arrow.id = parseAttributeId(shape_element);
+        arrow.header.frame_id = parseAttributeFrameId(shape_element);
 
         // Parse color
         arrow.color = parseElementColor(shape_element);
@@ -248,11 +239,11 @@ namespace RVizVis
         visualization_msgs::Marker text;
         text.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
         text.action = visualization_msgs::Marker::ADD;
-        text.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         text.ns = parseAttributeNs(shape_element);
         text.id = parseAttributeId(shape_element);
+        text.header.frame_id = parseAttributeFrameId(shape_element);
 
         // Parse pose
         text.pose = parseElementPose(shape_element);
@@ -275,11 +266,11 @@ namespace RVizVis
         visualization_msgs::Marker mesh;
         mesh.type = visualization_msgs::Marker::MESH_RESOURCE;
         mesh.action = visualization_msgs::Marker::ADD;
-        mesh.header.frame_id = frame_id;
 
-        // Parse ns and id
+        // Parse ns, id and frame_id
         mesh.ns = parseAttributeNs(shape_element);
         mesh.id = parseAttributeId(shape_element);
+        mesh.header.frame_id = parseAttributeFrameId(shape_element);
 
         // Parse pose
         mesh.pose = parseElementPose(shape_element);
@@ -332,6 +323,17 @@ namespace RVizVis
             throwErrorWithLine(error_msg, shape_element->GetLineNum());
         }
         return id;
+    }
+
+    string MarkersXMLParser::parseAttributeFrameId(XMLElement *shape_element)
+    {
+        const char *frame_id = shape_element->Attribute("frame_id");
+        if (frame_id == nullptr)
+        {
+            string error_msg = "Attribute frame_id missing in shape element.";
+            throwErrorWithLine(error_msg, shape_element->GetLineNum());
+        }
+        return string(frame_id);
     }
 
     geometry_msgs::Pose MarkersXMLParser::parseElementPose(XMLElement *shape_element)
