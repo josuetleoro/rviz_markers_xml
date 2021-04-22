@@ -52,3 +52,6 @@ add_executable(markers_xml_parser_node src/markers_xml_parser_node.cpp src/marke
 add_dependencies(markers_xml_parser_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(markers_xml_parser_node ${catkin_LIBRARIES})
 
+add_executable(rviz_markers_xml_node src/rviz_markers_xml_node.cpp src/markers_xml_parser.cpp)
+add_dependencies(rviz_markers_xml_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rviz_markers_xml_node ${catkin_LIBRARIES})
