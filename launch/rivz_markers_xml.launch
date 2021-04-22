@@ -1,5 +1,5 @@
 <launch>
-    <node name="rviz_markers_xml_node" pkg="rviz_markers_xml" type="rviz_markers_xml_node" output="screen">
+    <node name="markers_xml_parser_node" pkg="rviz_markers_xml" type="markers_xml_parser_node" output="screen">
         <param name="markers_config_file" type="string" value="$(find rviz_markers_xml)/config/markers.xml"/>
         <param name="topic" type="string" value="/markers"/>
     </node>

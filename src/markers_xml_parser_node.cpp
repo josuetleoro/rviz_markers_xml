@@ -15,16 +15,19 @@ int main(int argc, char *argv[])
     ros::init(argc, argv, "xml_parser_test_node");
     ros::NodeHandle nh("~");
 
-    std::string markers_file_path;
-    nh.param<std::string>("markers_file_path", markers_file_path, "");
-    ROS_INFO("Markers file path: %s", markers_file_path.c_str());
-    ros::Publisher marker_array_pub = nh.advertise<visualization_msgs::MarkerArray>("markers", 10);
+    std::string markers_config_file_path, topic;
+    nh.param<std::string>("markers_config_file", markers_config_file_path, "");
+    nh.param<std::string>("topic", topic, "");
+    ROS_INFO("Markers config file path: %s", markers_config_file_path.c_str());
+    ROS_INFO("Topic: %s", topic.c_str());
+
+    ros::Publisher marker_array_pub = nh.advertise<visualization_msgs::MarkerArray>(topic, 20);
 
     // Parse the xml file and get the marker array
     MarkersXMLParser *markers_xml_parser;
     try
     {
-        markers_xml_parser = new MarkersXMLParser(markers_file_path);
+        markers_xml_parser = new MarkersXMLParser(markers_config_file_path);
     }
     catch(const std::exception& ex)
     {
