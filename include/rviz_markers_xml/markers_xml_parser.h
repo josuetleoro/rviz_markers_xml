@@ -37,9 +37,11 @@ namespace RVizVis
         }
 
         visualization_msgs::Marker parseSphere(XMLElement *shape_element);
+        visualization_msgs::Marker parseCube(XMLElement *shape_element);
         visualization_msgs::Marker parseLineStrip(XMLElement *shape_element);
         visualization_msgs::Marker parseDashedLine(XMLElement *shape_element);
         visualization_msgs::Marker parseArrow(XMLElement *shape_element);
+        visualization_msgs::Marker parseCubeList(XMLElement *shape_element);
         visualization_msgs::Marker parseText(XMLElement *shape_element);
         visualization_msgs::Marker parseMesh(XMLElement *shape_element);
 

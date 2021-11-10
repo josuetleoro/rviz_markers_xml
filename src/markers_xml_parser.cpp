@@ -75,6 +75,11 @@ namespace RVizVis
                 ROS_INFO("Shape of type sphere found with the following parameters:");
                 markers_vector.push_back(parseSphere(element));
             }
+            else if (type_str.compare("cube") == 0)
+            {
+                ROS_INFO("Shape of type cube found with the following parameters:");
+                markers_vector.push_back(parseCube(element));
+            }
             else if (type_str.compare("line_strip") == 0)
             {
                 ROS_INFO("Shape of type line_strip found with the following parameters:");
@@ -94,6 +99,11 @@ namespace RVizVis
             {
                 ROS_INFO("Shape of type text found with the following parameters:");
                 markers_vector.push_back(parseText(element));
+            }
+            else if (type_str.compare("cube_list") == 0)
+            {
+                ROS_INFO("Shape of type cube list found with the following parameters:");
+                markers_vector.push_back(parseCubeList(element));
             }
             else if (type_str.compare("mesh") == 0)
             {
@@ -130,6 +140,29 @@ namespace RVizVis
         sphere.color = parseElementColor(shape_element);
         
         return sphere;
+    }
+
+    visualization_msgs::Marker MarkersXMLParser::parseCube(XMLElement *shape_element)
+    {
+        visualization_msgs::Marker cube;
+        cube.type = visualization_msgs::Marker::CUBE;
+        cube.action = visualization_msgs::Marker::ADD;
+
+        // Parse ns, id and frame_id
+        cube.ns = parseAttributeNs(shape_element);
+        cube.id = parseAttributeId(shape_element);
+        cube.header.frame_id = parseAttributeFrameId(shape_element);
+
+        // Parse pose       
+        cube.pose = parseElementPose(shape_element);
+
+        // Parse scale
+        cube.scale = parseElementScale3D(shape_element);
+
+        // Parse color
+        cube.color = parseElementColor(shape_element);
+        
+        return cube;
     }
 
     visualization_msgs::Marker MarkersXMLParser::parseLineStrip(XMLElement *shape_element)
@@ -224,6 +257,13 @@ namespace RVizVis
                 string error_msg = "Maximum number of points is two for shape element of type arrow.";
                 throwErrorWithLine(error_msg, shape_element->GetLineNum());
             }
+            // Fill a dummy pose
+            geometry_msgs::Pose pose;
+            pose.position.x = 0.0;
+            pose.position.y = 0.0;
+            pose.position.z = 0.0;
+            pose.orientation.w = 1.0;
+            arrow.pose = pose;
         }
         else
         {
@@ -232,6 +272,42 @@ namespace RVizVis
         }
                 
         return arrow;
+    }
+
+    visualization_msgs::Marker MarkersXMLParser::parseCubeList(XMLElement *shape_element)
+    {
+        visualization_msgs::Marker cube_list;
+        cube_list.type = visualization_msgs::Marker::CUBE_LIST;
+        cube_list.action = visualization_msgs::Marker::ADD;
+        // Add pose to the cube list
+        geometry_msgs::Pose pose;
+        pose.position.x = 0.0;
+        pose.position.y = 0.0;
+        pose.position.z = 0.0;
+        pose.orientation.w = 1.0;
+        cube_list.pose = pose;
+
+        // Parse ns, id and frame_id
+        cube_list.ns = parseAttributeNs(shape_element);
+        cube_list.id = parseAttributeId(shape_element);
+        cube_list.header.frame_id = parseAttributeFrameId(shape_element);        
+
+        // Parse scale
+        cube_list.scale = parseElementScale3D(shape_element);
+
+        // Parse color
+        std_msgs::ColorRGBA color = parseElementColor(shape_element);
+
+        // Parse the dash element
+        cube_list.points = parseElementPoints(shape_element);        
+
+        // For each point add a color to the cube_list
+        for (vector<geometry_msgs::Point>::iterator it = cube_list.points.begin(); it != cube_list.points.end(); it++)
+        {
+            cube_list.colors.push_back(color);
+        }
+        
+        return cube_list;
     }
 
     visualization_msgs::Marker MarkersXMLParser::parseText(XMLElement *shape_element)
