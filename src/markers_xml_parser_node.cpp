@@ -17,7 +17,9 @@ int main(int argc, char* argv[])
   ros::NodeHandle priv_nh("~");
 
   std::string markers_config_file_path;
+  double publish_frequency;
   priv_nh.param<std::string>("markers_config_file", markers_config_file_path, "");
+  priv_nh.param<double>("publish_frequency", publish_frequency, 30.0);
   ROS_INFO("Markers config file path: %s", markers_config_file_path.c_str());
 
   ros::Publisher marker_array_pub = nh.advertise<visualization_msgs::MarkerArray>("markers", 10);
@@ -38,7 +40,7 @@ int main(int argc, char* argv[])
   marker_array.markers = markers_xml_parser->getMarkers();
   ROS_INFO("Number of markers: %d", (int)marker_array.markers.size());
 
-  ros::Rate rate(10);
+  ros::Rate rate(publish_frequency);
   ros::Time curr_time;
   while (ros::ok())
   {
