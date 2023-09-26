@@ -354,6 +354,9 @@ visualization_msgs::Marker MarkersXMLParser::parseMesh(XMLElement* shape_element
   // Parse color
   mesh.color = parseElementColor(shape_element);
 
+  // Check if embedded materials are used
+  mesh.mesh_use_embedded_materials = parseElementUseMeshMaterials(shape_element);
+
   // Parse text
   mesh.mesh_resource = "package://" + parseElementUri(shape_element);
   ROS_INFO("Uri: %s", mesh.mesh_resource.c_str());
@@ -875,6 +878,25 @@ string MarkersXMLParser::parseElementUri(XMLElement* shape_element)
   }
 
   return string(value);
+}
+
+bool MarkersXMLParser::parseElementUseMeshMaterials(XMLElement* shape_element)
+{
+  XMLElement* use_mesh_materials_element = shape_element->FirstChildElement("use_mesh_materials");
+  if (use_mesh_materials_element == nullptr)
+  {
+    return false;
+  }
+
+  // Extract value attribute
+  bool flag = use_mesh_materials_element->BoolAttribute("value");
+
+  if (flag)
+  {
+    ROS_INFO("Mesh materials will be used.");
+  }
+
+  return flag;
 }
 
 };  // namespace RVizVis

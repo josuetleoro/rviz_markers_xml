@@ -95,11 +95,24 @@
     </shape>
 
     <!-- *Mesh -->
+    <!-- Colored mesh -->
     <shape type="mesh" ns="mesh" id="0" frame_id="map">
         <pose xyz="0.0 0.0 0.0" rpy="0 0 0"/>
         <scale3d xyz="1.0 1.0 1.0"/>
         <color rgba="0.7 0.7 0.7 1.0"/>
         <uri value="rviz_markers_xml/resources/Table.dae"/>
+    </shape>
+
+    <!-- Mesh with materials -->
+    <!-- To use a mesh material, set the element use_mesh_materials value to true. -->
+    <!-- The color must be 0 0 0 0 to use the original material color. -->
+    <!-- If a nonzero color is used, the color and alpha will be used to tint the mesh with the embedded material -->
+    <shape type="mesh" ns="mesh" id="1" frame_id="map">
+        <pose xyz="0.0 2.0 0.0" rpy="0 0 0"/>
+        <scale3d xyz="1.0 1.0 1.0"/>
+        <color rgba="0 0 0 0"/>
+        <use_mesh_materials value="true"/>
+        <uri value="rviz_markers_xml/resources/conveyor.dae"/>
     </shape>
 
 </markers>
